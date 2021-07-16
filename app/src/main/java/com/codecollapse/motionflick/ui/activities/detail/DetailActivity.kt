@@ -1,4 +1,4 @@
-package com.codecollapse.motionflick
+package com.codecollapse.motionflick.ui.activities.detail
 
 
 import android.os.Bundle
@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.codecollapse.motionflick.models.datamodels.MovieDetail
 import com.codecollapse.motionflick.ui.theme.MotionFlickTheme
+import com.codecollapse.motionflick.R
 
 class DetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

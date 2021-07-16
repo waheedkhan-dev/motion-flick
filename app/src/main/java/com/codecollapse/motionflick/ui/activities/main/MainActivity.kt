@@ -1,4 +1,4 @@
-package com.codecollapse.motionflick
+package com.codecollapse.motionflick.ui.activities.main
 
 import android.content.Context
 import android.content.Intent
@@ -30,9 +30,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import com.codecollapse.motionflick.R
 import com.codecollapse.motionflick.models.datamodels.CoverPhoto
 import com.codecollapse.motionflick.models.datamodels.FilterItems
 import com.codecollapse.motionflick.models.datamodels.Movies
+import com.codecollapse.motionflick.ui.activities.detail.DetailActivity
 import com.codecollapse.motionflick.ui.theme.MotionFlickTheme
 
 class MainActivity : ComponentActivity() {
@@ -282,7 +284,7 @@ private fun LatestMoviesLayout(movie: Movies,context : Context) {
                 .height(140.dp)
                 .fillMaxWidth()
                 .clickable {
-                    context.startActivity(Intent(context,DetailActivity::class.java))
+                    context.startActivity(Intent(context, DetailActivity::class.java))
                 },
             shape = RoundedCornerShape(8.dp),
             elevation = 2.dp
