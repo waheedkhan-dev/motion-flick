@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -30,14 +31,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.codecollapse.motionflick.R
 import com.codecollapse.motionflick.models.datamodels.CoverPhoto
 import com.codecollapse.motionflick.models.datamodels.FilterItems
 import com.codecollapse.motionflick.models.datamodels.Movies
 import com.codecollapse.motionflick.ui.activities.detail.DetailActivity
 import com.codecollapse.motionflick.ui.theme.MotionFlickTheme
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val startUpViewModel : StartUpViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +58,9 @@ class MainActivity : ComponentActivity() {
             MotionFlickTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
+                    startUpViewModel.getTrendingMoviesList().observe(this, Observer {
+
+                    })
                     HomePage()
                 }
             }

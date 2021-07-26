@@ -35,7 +35,9 @@ import androidx.core.content.ContextCompat
 import com.codecollapse.motionflick.models.datamodels.MovieDetail
 import com.codecollapse.motionflick.ui.theme.MotionFlickTheme
 import com.codecollapse.motionflick.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
