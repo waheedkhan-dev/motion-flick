@@ -13,4 +13,6 @@ import javax.inject.Inject
 class StartUpViewModel @Inject constructor(private var startUpRepository: StartUpRepository) : ViewModel() {
 
     fun getTrendingMoviesList() : LiveData<Resource<MotionFlickMovies>> = startUpRepository.getTrendingMoviesList().asLiveData()
+
+    fun getTopRatedMovies() : LiveData<Resource<MotionFlickMovies>> = startUpRepository.getTopRatedMovies().asLiveData()
 }

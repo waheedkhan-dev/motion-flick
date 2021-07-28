@@ -3,6 +3,7 @@ package com.codecollapse.motionflick.ui.activities.main
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,6 +17,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,21 +34,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.codecollapse.motionflick.R
+import com.codecollapse.motionflick.commons.AppConstants
 import com.codecollapse.motionflick.models.datamodels.CoverPhoto
 import com.codecollapse.motionflick.models.datamodels.FilterItems
-import com.codecollapse.motionflick.models.datamodels.Movies
+import com.codecollapse.motionflick.models.datamodels.MotionFlickMovies
+import com.codecollapse.motionflick.models.datasource.utils.Resource
 import com.codecollapse.motionflick.ui.activities.detail.DetailActivity
 import com.codecollapse.motionflick.ui.theme.MotionFlickTheme
+import com.google.accompanist.glide.rememberGlidePainter
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val startUpViewModel : StartUpViewModel by viewModels()
+    private val startUpViewModel: StartUpViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,10 +61,7 @@ class MainActivity : ComponentActivity() {
             MotionFlickTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    startUpViewModel.getTrendingMoviesList().observe(this, Observer {
-
-                    })
-                    HomePage()
+                    HomePage(startUpViewModel = startUpViewModel)
                 }
             }
         }
@@ -70,37 +70,29 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-private fun HomePage() {
+private fun HomePage(startUpViewModel: StartUpViewModel) {
     val context = LocalContext.current
-    val movieCoverPhotosList = arrayListOf<CoverPhoto>(
+    val trendingMoviesList: Resource<MotionFlickMovies> by startUpViewModel.getTrendingMoviesList()
+        .observeAsState(
+            initial = Resource.loading(data = null)
+        )
+    val topRatedMovies: Resource<MotionFlickMovies> by startUpViewModel.getTopRatedMovies()
+        .observeAsState(
+            initial = Resource.loading(data = null)
+        )
+
+    Log.d("LoadingData", "HomePage: $trendingMoviesList")
+    val movieCoverPhotosList = arrayListOf(
         CoverPhoto(R.drawable.lone_serviver),
         CoverPhoto(R.drawable.world_war_z_cover), CoverPhoto
             (R.drawable.avengers_cover_photo)
     )
 
-    val filterItemsList = arrayListOf<FilterItems>(
+    val filterItemsList = arrayListOf(
         FilterItems(R.drawable.ic_baseline_local_fire_department_24, "Hot"),
         FilterItems(R.drawable.ic_baseline_playlist_play_24, "Notice"),
         FilterItems(R.drawable.ic_baseline_list_24, "List"),
         FilterItems(R.drawable.ic_baseline_sort_24, "Sort")
-    )
-
-    val moviesList = arrayListOf<Movies>(
-        Movies("Fury", R.drawable.fury_cover_image),
-        Movies("The Hunter", R.drawable.the_hunter_cover_image),
-        Movies("DeepWaterHorizon", R.drawable.deep_water_horizon_cover_image),
-        Movies("MidWay", R.drawable.mid_way_cover_image),
-        Movies("John Wick 3", R.drawable.john_wick_cover_image),
-        Movies("Shooter", R.drawable.shooter_cover_image)
-    )
-
-    val isOnAirMoviesList = arrayListOf<Movies>(
-        Movies("Cold PurSuit", R.drawable.cold_pursuit_cover_image),
-        Movies("Alpha-4", R.drawable.alpha_4_cover_image),
-        Movies("The Equalizer-II", R.drawable.the_equalizer_2_cover_image),
-        Movies("Epic", R.drawable.epic_cover_image),
-        Movies("Bird Box", R.drawable.bird_box_cover_image),
-        Movies("Mine", R.drawable.mine_cover_image)
     )
 
     LazyColumn(
@@ -150,7 +142,7 @@ private fun HomePage() {
                     .height(70.dp),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
-                LazyRow() {
+                LazyRow {
                     items(filterItemsList) { filterItem ->
                         FilterItemsCard(filterItem)
                     }
@@ -185,9 +177,12 @@ private fun HomePage() {
                     .fillMaxWidth()
                     .height(180.dp)
             ) {
-                items(moviesList) { movie ->
-                    LatestMoviesLayout(movie = movie,context = context)
+                if (trendingMoviesList.data != null) {
+                    items(trendingMoviesList.data!!.results) { movie ->
+                        LatestMoviesLayout(movie = movie, context = context)
+                    }
                 }
+
             }
 
             Spacer(modifier = Modifier.padding(12.dp))
@@ -203,7 +198,7 @@ private fun HomePage() {
                 )
                 Spacer(modifier = Modifier.padding(2.dp))
                 Text(
-                    text = "Latest Online", textAlign = TextAlign.Justify, style = TextStyle(
+                    text = "Top Rated", textAlign = TextAlign.Justify, style = TextStyle(
                         color = colorResource(
                             id = R.color.black
                         ),
@@ -219,12 +214,13 @@ private fun HomePage() {
                     .fillMaxWidth()
                     .height(180.dp)
             ) {
-                items(isOnAirMoviesList) { movie ->
-                    LatestMoviesLayout(movie = movie,context = context)
+                if (topRatedMovies.data != null) {
+                    items(topRatedMovies.data!!.results) { movie ->
+                        LatestMoviesLayout(movie = movie, context = context)
+                    }
                 }
             }
         }
-
 
     }
 }
@@ -281,7 +277,7 @@ private fun FilterItemsCard(filterItems: FilterItems) {
 }
 
 @Composable
-private fun LatestMoviesLayout(movie: Movies,context : Context) {
+private fun LatestMoviesLayout(movie: MotionFlickMovies.Results, context: Context) {
     Column(
         modifier = Modifier
             .width(110.dp)
@@ -292,7 +288,7 @@ private fun LatestMoviesLayout(movie: Movies,context : Context) {
         Card(
             modifier = Modifier
                 .padding(4.dp)
-                .height(140.dp)
+                .height(150.dp)
                 .fillMaxWidth()
                 .clickable {
                     context.startActivity(Intent(context, DetailActivity::class.java))
@@ -300,8 +296,9 @@ private fun LatestMoviesLayout(movie: Movies,context : Context) {
             shape = RoundedCornerShape(8.dp),
             elevation = 2.dp
         ) {
+            
             Image(
-                painter = painterResource(id = movie.movieCoverPhoto!!),
+                painter = rememberGlidePainter(request = AppConstants.LOAD_IMAGE_BASE_URL + movie.poster_path),
                 contentDescription = "moviesCoverImages",
                 modifier = Modifier
                     .fillMaxWidth()
@@ -310,7 +307,7 @@ private fun LatestMoviesLayout(movie: Movies,context : Context) {
             )
         }
         Text(
-            text = movie.movieName!!,
+            text = movie.title!!,
             textAlign = TextAlign.Start,
             color = Color.Black,
             fontSize = 12.sp,
@@ -324,6 +321,6 @@ private fun LatestMoviesLayout(movie: Movies,context : Context) {
 @Composable
 fun DefaultPreview() {
     MotionFlickTheme {
-        HomePage()
+        HomePage(startUpViewModel = null!!)
     }
 }

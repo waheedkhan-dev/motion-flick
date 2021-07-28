@@ -21,6 +21,21 @@ class StartUpRepository @Inject constructor(private var motionFlickApi: MotionFl
             motionFlickApi.getTrendingMovies(AppConstants.API_KEY).let {
                 if(it.isSuccessful){
                     Log.d(TAG, "getTrendingMoviesList: ${it.body()!!.results}")
+                    emit(Resource.success(it.body()!!))
+                }else{
+                    emit(Resource.error(it.body()!!.status_message!!,data = null))
+                }
+            }
+        }.flowOn(IO)
+    }
+
+    fun getTopRatedMovies() : Flow<Resource<MotionFlickMovies>>{
+        return flow {
+
+            motionFlickApi.getTopRatedMovies(AppConstants.API_KEY).let {
+                if(it.isSuccessful){
+                    Log.d(TAG, "getTrendingMoviesList: ${it.body()!!.results}")
+                    emit(Resource.success(it.body()!!))
                 }else{
                     emit(Resource.error(it.body()!!.status_message!!,data = null))
                 }

@@ -7,6 +7,9 @@ import retrofit2.http.Query
 
 interface MotionFlickApi {
 
-    @GET("trending/all/week")
+    @GET("trending/all/day")
     suspend fun getTrendingMovies(@Query("api_key") apiKey : String) : Response<MotionFlickMovies>
+
+    @GET("movie/top_rated")
+    suspend fun getTopRatedMovies(@Query("api_key") apiKey: String) : Response<MotionFlickMovies>
 }
