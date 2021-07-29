@@ -291,7 +291,10 @@ private fun LatestMoviesLayout(movie: MotionFlickMovies.Results, context: Contex
                 .height(150.dp)
                 .fillMaxWidth()
                 .clickable {
-                    context.startActivity(Intent(context, DetailActivity::class.java))
+                    var intent = Intent(context,DetailActivity::class.java)
+                    intent.putExtra("movieId",movie.id)
+                    intent.putExtra("movieLanguage",movie.original_language)
+                    context.startActivity(intent)
                 },
             shape = RoundedCornerShape(8.dp),
             elevation = 2.dp

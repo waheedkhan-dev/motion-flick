@@ -1,10 +1,12 @@
 package com.codecollapse.motionflick.ui.activities.detail
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +20,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -35,20 +39,39 @@ import androidx.core.content.ContextCompat
 import com.codecollapse.motionflick.models.datamodels.MovieDetail
 import com.codecollapse.motionflick.ui.theme.MotionFlickTheme
 import com.codecollapse.motionflick.R
+import com.codecollapse.motionflick.commons.AppConstants
+import com.codecollapse.motionflick.models.datasource.utils.Resource
+import com.codecollapse.motionflick.ui.activities.main.StartUpViewModel
+import com.google.accompanist.glide.rememberGlidePainter
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailActivity : ComponentActivity() {
+
+    private val startUpViewModel: StartUpViewModel by viewModels()
+    var movieId: Int? = 0
+    var movieLanguages: String? = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(this, R.color.cardview_dark_background)
+
+
+        if (intent.hasExtra("movieId") && intent.hasExtra("movieLanguage")) {
+            movieId = intent.getIntExtra("movieId", 0)
+            movieLanguages = intent.getStringExtra("movieLanguage")
+        }
+
         setContent {
             MotionFlickTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    DetailComposable()
+                    DetailComposable(
+                        movieId = movieId!!,
+                        movieLanguages = movieLanguages!!,
+                        startUpViewModel
+                    )
                 }
             }
         }
@@ -56,9 +79,19 @@ class DetailActivity : ComponentActivity() {
 }
 
 @Composable
-private fun DetailComposable() {
+private fun DetailComposable(
+    movieId: Int,
+    movieLanguages: String,
+    startUpViewModel: StartUpViewModel
+) {
 
-    LazyColumn(
+    val movieDetail: Resource<MovieDetail> by startUpViewModel.getMovieDetails(
+        movieId = movieId,
+        movieLanguage = movieLanguages
+    ).observeAsState(initial = Resource.loading(data = null))
+
+    if(movieDetail.data!=null){
+        LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
@@ -71,7 +104,7 @@ private fun DetailComposable() {
                     .height(380.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.fury_detail_image),
+                    painter = rememberGlidePainter(request = AppConstants.LOAD_IMAGE_BASE_URL + movieDetail.data!!.backdrop_path),
                     contentDescription = "movieCoverLogo",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -192,8 +225,8 @@ private fun DetailComposable() {
                         color = colorResource(id = R.color.black),
                         fontFamily = FontFamily(
                             Font(R.font.roboto_medium)
-                        ),fontWeight = FontWeight.SemiBold
-                    ),modifier = Modifier.padding(12.dp,0.dp,0.dp,0.dp)
+                        ), fontWeight = FontWeight.SemiBold
+                    ), modifier = Modifier.padding(12.dp, 0.dp, 0.dp, 0.dp)
                 )
                 Text(
                     text = "In April 1945, the Allies are making their final push in the European theater. A battle-hardened Army sergeant named Don \"Wardaddy\" Collier (Brad Pitt), leading a Sherman tank and a five-man crew, undertakes a deadly mission behind enemy lines. Hopelessly outnumbered, outgunned and saddled with an inexperienced soldier (Logan Lerman) in their midst, Wardaddy and his men face overwhelming odds as they move to strike at the heart of Nazi Germany.",
@@ -204,12 +237,14 @@ private fun DetailComposable() {
                         fontFamily = FontFamily(
                             Font(R.font.roboto_regular)
                         )
-                    ),modifier = Modifier.padding(12.dp),
+                    ), modifier = Modifier.padding(12.dp),
                     fontWeight = FontWeight.W200
                 )
             }
         }
     }
+    }
+
 }
 
 @Composable
@@ -272,6 +307,6 @@ fun DataCompose(list: MovieDetail.MovieSubInfo) {
 @Composable
 fun DefaultPreview2() {
     MotionFlickTheme {
-        DetailComposable()
+      //  DetailComposable(0,"",null!!)
     }
 }
