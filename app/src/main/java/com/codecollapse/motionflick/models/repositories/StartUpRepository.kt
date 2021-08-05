@@ -48,14 +48,20 @@ class StartUpRepository @Inject constructor(private var motionFlickApi: MotionFl
 
     fun getMovieDetails(movieId: Int, movieLanguage: String): Flow<Resource<MovieDetail>> {
         return flow {
-            motionFlickApi.getMovieDetails(AppConstants.API_KEY, movieLanguage).let {
-                if (it.isSuccessful) {
-                    Log.d(TAG, "getMovieDetails: ${it.body()!!}")
-                    emit(Resource.success(it.body()!!))
-                } else {
-                    emit(Resource.error("something went wrong", data = null))
-                }
+            try {
+                motionFlickApi.getMovieDetails(movieId,AppConstants.API_KEY, movieLanguage).let {
+                    if (it.isSuccessful) {
+                        Log.d(TAG, "getMovieDetails: ${it.body()!!}")
+                        emit(Resource.success(it.body()!!))
+                    } else {
+                        emit(Resource.error("something went wrong", data = null))
+                    }
+                } 
+            }catch (ex : Exception){
+                Log.d(TAG, "getMovieDetails: ${ex.message}")
+                emit(Resource.error("something went wrong", data = null))
             }
+         
         }.flowOn(IO)
     }
 }

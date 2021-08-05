@@ -6,13 +6,14 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class MovieDetail(
 
-    var movieSubInfo: List<MovieSubInfo>,
+    @Transient
+    var movieSubInfo: List<MovieSubInfo> = arrayListOf(),
     @Json(name = "adult")
     var adult: Boolean? = false,
     @Json(name = "backdrop_path")
     var backdrop_path: String? = "",
     @Json(name = "belongs_to_collection")
-    var belongs_to_collection: String? = "",
+    var belongs_to_collection: BelongToCollection?=null,
     @Json(name = "budget")
     var budget: Int? = 0,
     @Json(name = "genres")
@@ -55,11 +56,11 @@ data class MovieDetail(
     var vote_count: Int? = 0
 
 ) {
-    @JsonClass(generateAdapter = true)
+
     data class MovieSubInfo(
-        var totalViewIcon : Int?=0,
-        var totalViews : String?=""
-    ){}
+        var totalViewIcon: Int? = 0,
+        var totalViews: String? = ""
+    ) {}
 
     @JsonClass(generateAdapter = true)
     data class Genres(
@@ -79,4 +80,16 @@ data class MovieDetail(
         @Json(name = "name")
         var name: String? = ""
     ) {}
+
+    @JsonClass(generateAdapter = true)
+    data class BelongToCollection(
+        @Json(name = "id")
+        var id : Int?=0,
+        @Json(name = "name")
+        var name : String?="",
+        @Json(name = "poster_path")
+        var poster_path : String?="",
+        @Json(name = "backdrop_path")
+        var backdrop_path : String?=""
+    ){}
 }
