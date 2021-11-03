@@ -1,6 +1,8 @@
 package com.codecollapse.motionflick.ui.activities.detail
 
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
@@ -23,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -261,11 +264,67 @@ private fun DetailComposable(
                         ), fontWeight = FontWeight.SemiBold
                     ), modifier = Modifier.padding(12.dp, 0.dp, 0.dp, 0.dp)
                 )
+                LazyRow(
+                    modifier = Modifier
+                        .padding(12.dp, 0.dp, 0.dp, 0.dp)
+                        .fillMaxWidth()
+                        .height(180.dp)
+                ) {
+                    if (movieCredits.data != null) {
+                        items(movieCredits.data!!.movieCast) { movieCast ->
+                            MovieCastLayout(movieCast = movieCast)
+                        }
+                    }
+                }
             }
         }
     }
-
 }
+
+@Composable
+private fun MovieCastLayout(movieCast: MovieCredits.MovieCast) {
+    Column(
+        modifier = Modifier
+            .width(90.dp)
+            .height(160.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.Start
+    ) {
+        Card(
+            modifier = Modifier
+                .padding(4.dp)
+                .height(120.dp)
+                .fillMaxWidth()
+                .clickable {
+                   /* var intent = Intent(context,DetailActivity::class.java)
+                    intent.putExtra("movieId",movie.id)
+                    intent.putExtra("movieLanguage",movie.original_language)
+                    context.startActivity(intent)*/
+                },
+            shape = RoundedCornerShape(8.dp),
+            elevation = 2.dp
+        ) {
+
+            Image(
+                painter = rememberGlidePainter(request = AppConstants.LOAD_IMAGE_BASE_URL + movieCast.profile_path),
+                contentDescription = "castProfile",
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
+                contentScale = ContentScale.Crop
+            )
+        }
+        Text(
+            text = movieCast.original_name!!,
+            textAlign = TextAlign.Start,
+            color = Color.Black,
+            fontSize = 12.sp,
+            fontFamily = FontFamily(Font(R.font.roboto_medium)),
+            modifier = Modifier.padding(4.dp)
+        )
+    }
+}
+
 
 @Composable
 fun MovieCompose(movieDetail: MovieDetail) {
