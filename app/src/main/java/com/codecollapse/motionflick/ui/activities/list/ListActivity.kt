@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -51,43 +52,51 @@ class ListActivity : ComponentActivity() {
 @Composable
 fun HeaderComposable() {
     val activityContext = LocalContext.current
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-    ) {
-        Row(
+    Column {
+        Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
-                .background(color = Color.White)
-                .padding(12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .height(60.dp)
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_baseline_arrow_back),
-                contentDescription = "BackArrow",
-                colorFilter = ColorFilter.tint(color = Color.Black),
-                modifier = Modifier.clickable {
-                    //  activityContext.startActivity(Intent(activityContext, MainActivity::class.java))
-                }
-            )
-            Text(
-                text = "LIST",
-                style = TextStyle(
-                    color = Color.Black,
-                    fontFamily = FontFamily(Font(R.font.roboto_medium)),
-                    fontSize = 18.sp
-                ), textAlign = TextAlign.Center
-            )
-            Image(
-                painter = painterResource(id = R.drawable.ic_baseline_ios_share_24),
-                contentDescription = "BackArrow",
-                colorFilter = ColorFilter.tint(color = Color.Black)
-            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+                    .background(color = Color.White)
+                    .padding(12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_baseline_arrow_back),
+                    contentDescription = "BackArrow",
+                    colorFilter = ColorFilter.tint(color = Color.Black),
+                    modifier = Modifier.clickable {
+                        //  activityContext.startActivity(Intent(activityContext, MainActivity::class.java))
+                    }
+                )
+                Text(
+                    text = "LIST",
+                    style = TextStyle(
+                        color = Color.Black,
+                        fontFamily = FontFamily(Font(R.font.roboto_medium)),
+                        fontSize = 18.sp
+                    ), textAlign = TextAlign.Center
+                )
+                Image(
+                    painter = painterResource(id = R.drawable.ic_baseline_ios_share_24),
+                    contentDescription = "BackArrow",
+                    colorFilter = ColorFilter.tint(color = Color.Black)
+                )
+            }
+        }
+        LazyColumn(){
+            items(5){
+                MovieComposable()
+            }
         }
     }
+
 }
 
 
@@ -97,8 +106,8 @@ fun MovieComposable() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
-            .background(color = Color.Gray)
+            .height(150.dp)
+            .background(color = Color.White)
     ) {
         Row(
             modifier = Modifier
@@ -124,7 +133,7 @@ fun MovieComposable() {
             }
             Column(
                 modifier = Modifier
-                    .background(color = colorResource(id = R.color.offWhite))
+                    .background(color = colorResource(id = R.color.white))
                     .fillMaxWidth()
                     .fillMaxHeight()
             ) {
