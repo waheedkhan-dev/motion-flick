@@ -21,7 +21,5 @@ Motion Flick is an app which get data from The Movie DataBase (TMDB) to fetch Tr
    <a target="_blank" rel="noopener noreferrer" href="">
      <img src="https://user-images.githubusercontent.com/55230825/140015015-e3785fe2-d349-488f-9577-0f7be4df833e.jpg" width="330" style="max-width: 100%;"></a>
    <a target="_blank" rel="noopener noreferrer" href="">
-     <img src="https://user-images.githubusercontent.com/55230825/140015022-a1e7e0a4-ae2a-4857-a3ea-9b1f9e22acea.jpg" width="330" style="max-width: 100%;"></a>
+     <img src="https://user-images.githubusercontent.com/55230825/140122633-453698a2-dcb0-40f4-a0ff-fc3adff4c92c.jpg" width="330" style="max-width: 100%;"></a>
   </div>
-
-
