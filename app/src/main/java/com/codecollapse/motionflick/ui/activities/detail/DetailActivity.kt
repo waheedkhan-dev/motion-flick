@@ -43,7 +43,7 @@ import com.codecollapse.motionflick.commons.AppConstants
 import com.codecollapse.motionflick.models.datamodels.MovieCredits
 import com.codecollapse.motionflick.models.datamodels.MovieDetail
 import com.codecollapse.motionflick.models.datasource.utils.Resource
-import com.codecollapse.motionflick.ui.activities.main.StartUpViewModel
+import com.codecollapse.motionflick.models.viewmodel.StartUpViewModel
 import com.codecollapse.motionflick.ui.theme.MotionFlickTheme
 import com.google.accompanist.glide.rememberGlidePainter
 import dagger.hilt.android.AndroidEntryPoint

@@ -3,9 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/ZoneTech/AndroidProjects/Practice/Compose/MotionFlick/app/src/main/res/drawable/ic_share_movie.xml" value="0.22135416666666666" />
         <entry key="..\:/ZoneTech/AndroidProjects/Practice/Compose/MotionFlick/app/src/main/res/drawable/ic_visibility.xml" value="0.2713541666666667" />
         <entry key="..\:/ZoneTech/AndroidProjects/Practice/Compose/MotionFlick/app/src/main/res/drawable/outline_favorite_24.xml" value="0.2203125" />
         <entry key="..\:/ZoneTech/AndroidProjects/Practice/Compose/MotionFlick/app/src/main/res/drawable/outline_favorite_border_24.xml" value="0.2203125" />
+        <entry key="..\:/ZoneTech/AndroidProjects/Practice/Compose/MotionFlick/app/src/main/res/layout/sample_rating_bar_view.xml" value="0.36666666666666664" />
         <entry key="..\:/ZoneTech/AndroidProjects/Practice/Compose/MovieApp/app/src/main/res/drawable/ic_baseline_movie_24.xml" value="0.3828125" />
       </map>
     </option>

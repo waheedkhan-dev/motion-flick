@@ -40,7 +40,9 @@ import com.codecollapse.motionflick.models.datamodels.CoverPhoto
 import com.codecollapse.motionflick.models.datamodels.FilterItems
 import com.codecollapse.motionflick.models.datamodels.MotionFlickMovies
 import com.codecollapse.motionflick.models.datasource.utils.Resource
+import com.codecollapse.motionflick.models.viewmodel.StartUpViewModel
 import com.codecollapse.motionflick.ui.activities.detail.DetailActivity
+import com.codecollapse.motionflick.ui.activities.list.ListActivity
 import com.codecollapse.motionflick.ui.theme.MotionFlickTheme
 import com.google.accompanist.glide.rememberGlidePainter
 import dagger.hilt.android.AndroidEntryPoint
@@ -144,7 +146,7 @@ private fun HomePage(startUpViewModel: StartUpViewModel) {
             ) {
                 LazyRow {
                     items(filterItemsList) { filterItem ->
-                        FilterItemsCard(filterItem)
+                        FilterItemsCard(filterItem,context)
                     }
                 }
             }
@@ -246,14 +248,18 @@ private fun HeaderCards(item: CoverPhoto) {
 }
 
 @Composable
-private fun FilterItemsCard(filterItems: FilterItems) {
+private fun FilterItemsCard(filterItems: FilterItems,context: Context) {
 
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .padding(24.dp, 0.dp, 24.dp, 0.dp)
             .clickable {
-
+                when(filterItems.itemName){
+                    "List"->{
+                        context.startActivity(Intent(context,ListActivity::class.java))
+                    }
+                }
             },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

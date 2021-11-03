@@ -1,4 +1,4 @@
-package com.codecollapse.motionflick.ui.activities.main
+package com.codecollapse.motionflick.models.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
