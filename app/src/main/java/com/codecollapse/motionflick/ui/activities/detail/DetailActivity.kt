@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.codecollapse.motionflick.R
 import com.codecollapse.motionflick.commons.AppConstants
+import com.codecollapse.motionflick.models.datamodels.MovieCredits
 import com.codecollapse.motionflick.models.datamodels.MovieDetail
 import com.codecollapse.motionflick.models.datasource.utils.Resource
 import com.codecollapse.motionflick.ui.activities.main.StartUpViewModel
@@ -85,6 +86,11 @@ private fun DetailComposable(
 ) {
 
     val movieDetail: Resource<MovieDetail> by startUpViewModel.getMovieDetails(
+        movieId = movieId,
+        movieLanguage = movieLanguages
+    ).observeAsState(initial = Resource.loading(data = null))
+
+    val movieCredits: Resource<MovieCredits> by startUpViewModel.getMovieCredits(
         movieId = movieId,
         movieLanguage = movieLanguages
     ).observeAsState(initial = Resource.loading(data = null))
@@ -171,15 +177,15 @@ private fun DetailComposable(
 
                             }
 
-                            var movieGenres  = ""
-                                movieDetail.data!!.genres.forEach { movieGenres = it.name!! }
+                            var movieGenres = ""
+                            movieDetail.data!!.genres.forEach { movieGenres = it.name!! }
 
                             Text(
                                 text = "$movieGenres",
                                 textAlign = TextAlign.Start,
                                 style = TextStyle(
                                     fontSize = 12.sp,
-                                    color = colorResource(id = R.color.lightGrey),
+                                    color = colorResource(id = R.color.black),
                                     fontFamily = FontFamily(
                                         Font(R.font.roboto_medium)
                                     )
@@ -217,7 +223,7 @@ private fun DetailComposable(
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(250.dp)
+                        .height(100.dp)
                 ) {
                     Text(
                         text = "STORYLINE",
@@ -235,7 +241,7 @@ private fun DetailComposable(
                         textAlign = TextAlign.Start,
                         style = TextStyle(
                             fontSize = 12.sp,
-                            color = colorResource(id = R.color.lightGrey),
+                            color = colorResource(id = R.color.black),
                             fontFamily = FontFamily(
                                 Font(R.font.roboto_regular)
                             )
@@ -243,6 +249,18 @@ private fun DetailComposable(
                         fontWeight = FontWeight.W200
                     )
                 }
+                Spacer(modifier = Modifier.padding(8.dp))
+                Text(
+                    text = "CAST",
+                    textAlign = TextAlign.Start,
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = colorResource(id = R.color.black),
+                        fontFamily = FontFamily(
+                            Font(R.font.roboto_medium)
+                        ), fontWeight = FontWeight.SemiBold
+                    ), modifier = Modifier.padding(12.dp, 0.dp, 0.dp, 0.dp)
+                )
             }
         }
     }
@@ -296,7 +314,7 @@ fun DataCompose(list: MovieDetail.MovieSubInfo) {
         textAlign = TextAlign.Start,
         style = TextStyle(
             fontSize = 12.sp,
-            color = colorResource(id = R.color.lightGrey),
+            color = colorResource(id = R.color.black),
             fontFamily = FontFamily(
                 Font(R.font.roboto_medium)
             )

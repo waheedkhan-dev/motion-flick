@@ -1,6 +1,7 @@
 package com.codecollapse.motionflick.models.datasource.api
 
 import com.codecollapse.motionflick.models.datamodels.MotionFlickMovies
+import com.codecollapse.motionflick.models.datamodels.MovieCredits
 import com.codecollapse.motionflick.models.datamodels.MovieDetail
 import retrofit2.Response
 import retrofit2.http.GET
@@ -21,4 +22,11 @@ interface MotionFlickApi {
         @Query("api_key") apiKey: String,
         @Query("language") language: String
     ): Response<MovieDetail>
+
+    @GET("movie/{movie_id}/credits")
+    suspend fun getMovieCredits(
+        @Path("movie_id") movieId: Int,
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String
+    ) : Response<MovieCredits>
 }

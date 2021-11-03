@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.codecollapse.motionflick.models.datamodels.MotionFlickMovies
+import com.codecollapse.motionflick.models.datamodels.MovieCredits
 import com.codecollapse.motionflick.models.datamodels.MovieDetail
 import com.codecollapse.motionflick.models.datasource.utils.Resource
 import com.codecollapse.motionflick.models.repositories.StartUpRepository
@@ -22,4 +23,7 @@ class StartUpViewModel @Inject constructor(private var startUpRepository: StartU
 
     fun getMovieDetails(movieId: Int, movieLanguage: String): LiveData<Resource<MovieDetail>> =
         startUpRepository.getMovieDetails(movieId = movieId, movieLanguage).asLiveData()
+
+    fun getMovieCredits(movieId: Int,movieLanguage: String) : LiveData<Resource<MovieCredits>> =
+        startUpRepository.getMovieCredits(movieId = movieId,movieLanguage = movieLanguage).asLiveData()
 }

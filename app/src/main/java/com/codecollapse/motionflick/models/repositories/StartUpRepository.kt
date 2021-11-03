@@ -3,6 +3,7 @@ package com.codecollapse.motionflick.models.repositories
 import android.util.Log
 import com.codecollapse.motionflick.commons.AppConstants
 import com.codecollapse.motionflick.models.datamodels.MotionFlickMovies
+import com.codecollapse.motionflick.models.datamodels.MovieCredits
 import com.codecollapse.motionflick.models.datamodels.MovieDetail
 import com.codecollapse.motionflick.models.datasource.api.MotionFlickApi
 import com.codecollapse.motionflick.models.datasource.utils.Resource
@@ -62,6 +63,25 @@ class StartUpRepository @Inject constructor(private var motionFlickApi: MotionFl
                 emit(Resource.error("something went wrong", data = null))
             }
          
+        }.flowOn(IO)
+    }
+
+    fun getMovieCredits(movieId: Int, movieLanguage: String): Flow<Resource<MovieCredits>> {
+        return flow {
+            try {
+                motionFlickApi.getMovieCredits(movieId,AppConstants.API_KEY, movieLanguage).let {
+                    if (it.isSuccessful) {
+                        Log.d(TAG, "MovieCredits: ${it.body()!!}")
+                        emit(Resource.success(it.body()!!))
+                    } else {
+                        emit(Resource.error("something went wrong", data = null))
+                    }
+                }
+            }catch (ex : Exception){
+                Log.d(TAG, "getMovieDetails: ${ex.message}")
+                emit(Resource.error("something went wrong", data = null))
+            }
+
         }.flowOn(IO)
     }
 }
