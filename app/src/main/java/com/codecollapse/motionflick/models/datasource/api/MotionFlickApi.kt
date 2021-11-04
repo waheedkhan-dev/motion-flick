@@ -16,6 +16,9 @@ interface MotionFlickApi {
     @GET("movie/top_rated")
     suspend fun getTopRatedMovies(@Query("api_key") apiKey: String): Response<MotionFlickMovies>
 
+    @GET("movie/upcoming")
+    suspend fun getUpComingMovies(@Query("api_key") apiKey: String) : Response<MotionFlickMovies>
+
     @GET("movie/{movie_id}")
     suspend fun getMovieDetails(
         @Path("movie_id") movieId : Int,

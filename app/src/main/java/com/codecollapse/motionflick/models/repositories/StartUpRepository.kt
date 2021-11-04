@@ -47,6 +47,20 @@ class StartUpRepository @Inject constructor(private var motionFlickApi: MotionFl
         }.flowOn(IO)
     }
 
+    fun getUpComingMovies(): Flow<Resource<MotionFlickMovies>> {
+        return flow {
+
+            motionFlickApi.getUpComingMovies(AppConstants.API_KEY).let {
+                if (it.isSuccessful) {
+                    Log.d(TAG, "getUpComingMovies: ${it.body()!!.results}")
+                    emit(Resource.success(it.body()!!))
+                } else {
+                    emit(Resource.error(it.body()!!.status_message!!, data = null))
+                }
+            }
+        }.flowOn(IO)
+    }
+
     fun getMovieDetails(movieId: Int, movieLanguage: String): Flow<Resource<MovieDetail>> {
         return flow {
             try {

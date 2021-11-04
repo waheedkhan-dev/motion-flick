@@ -21,6 +21,9 @@ class StartUpViewModel @Inject constructor(private var startUpRepository: StartU
     fun getTopRatedMovies(): LiveData<Resource<MotionFlickMovies>> =
         startUpRepository.getTopRatedMovies().asLiveData()
 
+    fun getUpComingMovies(): LiveData<Resource<MotionFlickMovies>> =
+        startUpRepository.getUpComingMovies().asLiveData()
+
     fun getMovieDetails(movieId: Int, movieLanguage: String): LiveData<Resource<MovieDetail>> =
         startUpRepository.getMovieDetails(movieId = movieId, movieLanguage).asLiveData()
 
