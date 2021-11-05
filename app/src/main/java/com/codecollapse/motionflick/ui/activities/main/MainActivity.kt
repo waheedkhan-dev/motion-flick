@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -101,6 +102,7 @@ private fun HomePage(startUpViewModel: StartUpViewModel) {
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
+            .background(color = colorResource(id = R.color.white))
     ) {
         item {
             Row(
@@ -146,7 +148,7 @@ private fun HomePage(startUpViewModel: StartUpViewModel) {
             ) {
                 LazyRow {
                     items(filterItemsList) { filterItem ->
-                        FilterItemsCard(filterItem,context)
+                        FilterItemsCard(filterItem, context)
                     }
                 }
             }
@@ -248,16 +250,16 @@ private fun HeaderCards(item: CoverPhoto) {
 }
 
 @Composable
-private fun FilterItemsCard(filterItems: FilterItems,context: Context) {
+private fun FilterItemsCard(filterItems: FilterItems, context: Context) {
 
     Column(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .padding(24.dp, 0.dp, 24.dp, 0.dp)
             .clickable {
-                when(filterItems.itemName){
-                    "List"->{
-                        context.startActivity(Intent(context,ListActivity::class.java))
+                when (filterItems.itemName) {
+                    "List" -> {
+                        context.startActivity(Intent(context, ListActivity::class.java))
                     }
                 }
             },
@@ -297,15 +299,15 @@ private fun LatestMoviesLayout(movie: MotionFlickMovies.Results, context: Contex
                 .height(150.dp)
                 .fillMaxWidth()
                 .clickable {
-                    var intent = Intent(context,DetailActivity::class.java)
-                    intent.putExtra("movieId",movie.id)
-                    intent.putExtra("movieLanguage",movie.original_language)
+                    var intent = Intent(context, DetailActivity::class.java)
+                    intent.putExtra("movieId", movie.id)
+                    intent.putExtra("movieLanguage", movie.original_language)
                     context.startActivity(intent)
                 },
             shape = RoundedCornerShape(8.dp),
             elevation = 2.dp
         ) {
-            
+
             Image(
                 painter = rememberGlidePainter(request = AppConstants.LOAD_IMAGE_BASE_URL + movie.poster_path),
                 contentDescription = "moviesCoverImages",
